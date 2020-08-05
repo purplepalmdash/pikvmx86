@@ -1,0 +1,54 @@
+#!/bin/sh
+# try and keep this pure bourne shell
+# minimal clone of raspberry tool vcgencmd - for use with Android rpicheck and rock64 SBC
+
+command=$1
+case ${1} in
+        measure_clock)
+                case ${2} in
+                        arm)
+                                # awk is probably overkill....
+                                /usr/local/sbin/rock64_health.sh | awk '/CPU freq/{print "frequency(45)=" $4 * 1000000}'
+                                #value=`/usr/local/sbin/rock64_health.sh | awk '/CPU freq/{print $4 * 1000000}'`
+                                #echo 'frequency(45)='${value}
+                                exit
+                        ;;
+                        core)
+                                value=0  # TODO / FIXME
+                                echo 'frequency(1)='${value}
+                                exit
+                        ;;
+                # TODO anything else thrown an error/debug
+                esac
+                exit
+                ;;
+        measure_temp)
+                # awk is probably overkill....
+                #/usr/local/sbin/rock64_health.sh | awk '/SoC Temp/{print $4 "\\\'C"}'
+                #value=`/usr/local/sbin/rock64_health.sh | awk '/SoC Temp/{print $4}'`
+                #value=`46'
+                #echo 'temp='${value}"'C"
+                echo "temp=46.7'C"
+                exit
+                ;;
+        get_throttled)
+                echo 'throttled=0x50000'
+                exit
+                ;;
+        measure_volts)
+                case ${2} in
+                        core)
+                                value=0  # TODO / FIXME
+                                echo 'volt='${value}'.0000V'
+                                exit
+                        ;;
+                # TODO anything else thrown an error/debug
+                esac
+                ;;
+        version)
+                echo 'Nov  4 2018 16:31:07'
+                echo 'Copyright (c) 2012 rock64'
+                echo 'version rock64_TODO (clean) (release)'
+                exit
+                ;;
+esac
